@@ -1,19 +1,28 @@
-import {useEffect} from 'react';
+
 import './App.css';
+import Login from './components/Login';
+import MainPage from './components/MainPage';
+import Test from './components/Test';
+import React, { useState } from 'react'
 
 function App() {
+  const [loggedIn, setLoggedIn] = useState('')
 
-  useEffect(() => {
-    // TEST API, it might be removed
-    fetch('http://localhost:8080/live').then(res => res.json()).then(res => {
-      console.log('API CONNECTION IS OK');
-    }).catch((e) => console.error('API CONNECTION FAILED, PLEASE CHECK SERVER APP AND TRY AGAIN'))
-  }, []);
+  function loggedInFunc(user) {
+    setLoggedIn(user)
+  }
 
   return (
-    <div className="App">
-      TASK IMPLEMENTATION HERE
-    </div>
+    <>
+    {
+      !loggedIn
+        ?
+        <Login loggedIn={loggedInFunc}/>
+        :
+        <MainPage loggedIn={loggedInFunc} user={loggedIn}/>
+    }
+    </>
+    
   );
 }
 
