@@ -2,8 +2,10 @@
 import './App.css';
 import Login from './components/Login';
 import MainPage from './components/MainPage';
-import Test from './components/Test';
 import React, { useState } from 'react'
+import { Context } from './components/context/Context';
+import 'bootstrap/dist/css/bootstrap.css'
+
 
 function App() {
   const [loggedIn, setLoggedIn] = useState('')
@@ -13,7 +15,7 @@ function App() {
   }
 
   return (
-    <>
+    <Context.Provider value={loggedIn}>
     {
       !loggedIn
         ?
@@ -21,7 +23,7 @@ function App() {
         :
         <MainPage loggedIn={loggedInFunc} user={loggedIn}/>
     }
-    </>
+    </Context.Provider>
     
   );
 }

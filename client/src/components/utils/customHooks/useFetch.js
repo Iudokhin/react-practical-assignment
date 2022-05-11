@@ -1,15 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react'
+import  { useEffect, useRef, useState } from 'react'
 
-export default function useFetch(url) {
-
+export default function useFetch(url, rerender) {
     const isCurrent = useRef(true)
     const [fetchedData, setFetchedData] = useState({data:'', loading: true, error:null})
 
-    useEffect(() => {
-        return () => {
-            isCurrent.current = false
-        }
-    }, [])
+
 
     
     useEffect(() => {
@@ -25,7 +20,7 @@ export default function useFetch(url) {
             setFetchedData({data:'', loading:false, error})
         })
         
-    }, [url, setFetchedData])
+    }, [url, rerender])
     
   return fetchedData
 }
