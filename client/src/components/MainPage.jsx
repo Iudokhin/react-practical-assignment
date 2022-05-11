@@ -13,7 +13,8 @@ export default function MainPage(props) {
         <div className='d-flex justify-content-center py-3'>
           <MyModal type='add_post'/>
         </div>
-        <Posts />   
+        <Posts />
+
     </div>
   )
 }

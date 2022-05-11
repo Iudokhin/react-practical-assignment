@@ -1,4 +1,4 @@
-import React, { createContext, useState } from 'react'
+import React, { createContext, useEffect, useRef, useState } from 'react'
 import useFetch from '../utils/customHooks/useFetch'
 import Post from './Post'
 
@@ -7,12 +7,12 @@ export const Rerender = createContext()
 export default function Posts() {
     const [page, setPage] = useState(1)
     const [rerender, setRerender] = useState(true)
-    const {data, loading, error} = useFetch(`http://localhost:8080/post/page/${page}`, rerender)
+    let {data, loading, error} = useFetch(`http://localhost:8080/post/page/${page}`, rerender)
 
     function createPagination(pages) {
         let arr = []
         for(let i = 0; i<pages; i++) {
-            arr.push(<li  key={i} onClick={(e) => setPage(e.target.innerHTML)} className='page-item'><a class="page-link" href="#">{i+1}</a></li>)
+            arr.push(<li  key={i} onClick={(e) => setPage(e.target.innerHTML)} className='page-item'><a className="page-link" href="#">{i+1}</a></li>)
         }
         return arr
     }
@@ -23,7 +23,7 @@ export default function Posts() {
 
   return (
     <Rerender.Provider value={setRerender}>
-        {
+        { 
             loading
                 ?
                 <div>Loading...</div>
