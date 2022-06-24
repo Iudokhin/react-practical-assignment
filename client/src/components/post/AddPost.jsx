@@ -1,19 +1,21 @@
-import React, { useContext, useState } from 'react'
-import { Context } from '../context/Context'
-import { Rerender } from './Posts'
-import { createPost } from '../utils/updatePost'
+import React, {  useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { rerender } from '../../features/reducers/postSlice'
+import { createPost } from '../../features/funcs/mainPostFuncs'
+import './styles/Posts.css'
 
-export default function AddPost(props) {
-  const user = useContext(Context)
+export default function AddPost({closeModal}) {
   const [title, setTitle] = useState('')
-  const rerender = useContext(Rerender)
+  const dispatch = useDispatch()
+  const {user} = useSelector(store => store.account)
 
   return (
-    <div className='d-flex justify-content-between px-4'>
-      <input className='border rounded w-100 ps-4 fs-5' value={title} onChange={(e) => setTitle(e.target.value)} type='text' placeholder='Input Title'/>
-      <button className='btn btn-primary' onClick={() => {
-        createPost({title:title, username:user}, () => rerender)
-        props.closeModal(false)
+    <div className='posts__add-post'>
+      <input className='post_input' value={title} onChange={(e) => setTitle(e.target.value)} type='text' placeholder='Input Title'/>
+      <button className='custom-button' onClick={() => {
+        dispatch(createPost({title:title, username:user} ))
+        dispatch(rerender())
+        closeModal(false)
       }}
         >AddPost</button>
     </div>

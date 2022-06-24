@@ -1,0 +1,27 @@
+.comment__add{
+    display: flex;
+    justify-content: space-between;
+    gap:10px;
+}
+
+.comment__list{
+    display: flex;
+    flex-direction: column;
+    gap:10px;
+}
+
+.comment__item{
+    border:1px solid rgba(0, 0, 0, 0.356);
+    border-radius: 15px;
+    padding:10px;
+    font-size: 1.3rem;
+}
+
+.comment__item_edit{
+    display: flex;
+    justify-content: space-between;
+    padding:10px;
+}
+
+
+

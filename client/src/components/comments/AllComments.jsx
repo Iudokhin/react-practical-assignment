@@ -1,28 +1,24 @@
 import React from 'react'
 import Comment from './Comment'
-import useFetch from '../utils/customHooks/useFetch'
+import { useSelector } from 'react-redux'
 
-export default function AllComments(props) {
-  const {data,loading} = useFetch(`http://localhost:8080/post/${props.postId}`)
+export default function AllComments({postId}) {
+  const post = useSelector(store => store.post.posts.find(el => el.id === postId))
 
   return (
-    <div>
+    <>
         {
-            loading
-                ?
-                <div>Loading...</div>
-                :
-                data.result.comments.length === 0 
-                    ? 
-                    <div>NO COMMENTS</div>
-                    :
-                    <ul>
-                        <p>Total comments: {data.result.comments.length}</p>
-                        {data.result.comments.map((el,index) => <Comment key={index} comment={el}/>)}
-                    </ul>
+          post.comments.length === 0 
+          ? 
+          <div>NO COMMENTS</div>
+          :
+          <ul className='comment__list'>
+              <p>Total comments: {post.comments.length}</p>
+              {post.comments.map((el,index) => <Comment key={index} {...el}/>)}
+          </ul>
         }
 
-    </div>
+    </>
     
   )
 }

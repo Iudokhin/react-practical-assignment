@@ -1,30 +1,17 @@
 
 import './App.css';
-import Login from './components/Login';
-import MainPage from './components/MainPage';
-import React, { useState } from 'react'
-import { Context } from './components/context/Context';
+import MainPage from './components/mainPage/MainPage';
+import React from 'react'
 import 'bootstrap/dist/css/bootstrap.css'
+import { store } from './features/store/store';
+import {Provider} from 'react-redux'
 
 
 function App() {
-  const [loggedIn, setLoggedIn] = useState('')
-
-  function loggedInFunc(user) {
-    setLoggedIn(user)
-  }
-
   return (
-    <Context.Provider value={loggedIn}>
-    {
-      !loggedIn
-        ?
-        <Login loggedIn={loggedInFunc}/>
-        :
-        <MainPage loggedIn={loggedInFunc} user={loggedIn}/>
-    }
-    </Context.Provider>
-    
+    <Provider store={store}>
+        <MainPage />
+    </Provider>
   );
 }
 

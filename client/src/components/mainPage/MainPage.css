@@ -1,0 +1,21 @@
+.mainPage__header{
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    background-color: black;
+    color: white;
+    align-items: center;
+}
+
+.mainPage__modal{
+    display: flex;
+    justify-content: center;
+    padding: 20px 0;
+}
+
+.mainPage__login{
+    display: flex;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+}

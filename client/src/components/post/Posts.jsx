@@ -1,39 +1,54 @@
-import React, { createContext, useEffect, useRef, useState } from 'react'
-import useFetch from '../utils/customHooks/useFetch'
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { filterPosts, loadPosts } from '../../features/funcs/mainPostFuncs'
 import Post from './Post'
-
-export const Rerender = createContext()
+import Filter from './filter/Filter'
+import './styles/Posts.css'
 
 export default function Posts() {
     const [page, setPage] = useState(1)
-    const [rerender, setRerender] = useState(true)
-    let {data, loading, error} = useFetch(`http://localhost:8080/post/page/${page}`, rerender)
+    const {isLoading, toFilter, posts, totalPages, rerender} = useSelector(store => store.post)
+    const dispatch = useDispatch()
 
-    function createPagination(pages) {
+    useEffect(() => {
+        if(toFilter) {
+            dispatch(filterPosts(toFilter))
+        }else{
+            dispatch(loadPosts(page))
+        }    
+    },[page, rerender, toFilter, dispatch])
+
+    function createPagination() {
+        if(toFilter)
+            return null
+
         let arr = []
-        for(let i = 0; i<pages; i++) {
-            arr.push(<li  key={i} onClick={(e) => setPage(e.target.innerHTML)} className='page-item'><a className="page-link" href="#">{i+1}</a></li>)
+        for(let i = 0; i<totalPages; i++) {
+            arr.push(<li  key={i} onClick={e => setPage(e.target.innerHTML)} className='page-item'><button className="page-link" href="#">{i+1}</button></li>)
         }
         return arr
     }
 
-    if(error) {
-        return <h1>Oops, looks kile smth went wrong</h1>
-    }
-
   return (
-    <Rerender.Provider value={setRerender}>
+    <>
         { 
-            loading
+            isLoading
                 ?
                 <div>Loading...</div>
                 :
-                <pre className='row row-cols-3'>
-                    {data.result.map((el, index) => <Post key={index} data={el} />)}
-                </pre>
+                <>
+                    <Filter />
+                    <pre className='row row-cols-xl-3  row-cols-md-2 row-cols-1'>
+                        {posts.length === 0
+                            ?
+                            <div className='posts__not-found'>No posts found</div>
+                            :
+                            posts.map((el) => <Post key={el.id} {...el} />)}
+                    </pre>
+                </>
         }
-        <ul className='pagination pagination-lg d-flex justify-content-center'>{createPagination(data.totalPages)}</ul>
+        <ul className='pagination pagination-lg d-flex justify-content-center'>{createPagination()}</ul>
 
-    </Rerender.Provider>
+    </>
   )
 }

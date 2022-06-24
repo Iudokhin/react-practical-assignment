@@ -4,51 +4,55 @@ import AddPost from "../post/AddPost";
 import AddComment from "../comments/AddComment";
 import AllComments from "../comments/AllComments";
 import EditPost from "../post/EditPost";
+import { useCallback } from "react";
+import { ADD_COMMENT, ADD_POST, ALL_COMMENTS, EDIT } from "./constants";
 
 
-export default function MyModal(props) {
+export default function MyModal({type:typeToRender, disabled, postId}) {
     const [show, setShow] = useState(false);
     const [type,setType] = useState('')
 
     useEffect(() => {
-      switch (props.type) {
-        case 'add_post':
-          setType('Add post');
+      switch (typeToRender) {
+        case ADD_POST:
+          setType(ADD_POST);
           break;
-        case 'add_comment':
-          setType('Add comment');
+        case ADD_COMMENT:
+          setType(ADD_COMMENT);
           break;
-        case 'edit_post':
-          setType('EDIT');
+        case EDIT:
+          setType(EDIT);
           break;
-        case 'comments':
-          setType('All Comments');
+        case ALL_COMMENTS:
+          setType(ALL_COMMENTS);
           break;
         default:
           break;
       }
-    },[props.type])
+    },[typeToRender])
   
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+    const handleClose = useCallback(() => setShow(false),[])
+    const handleShow = useCallback(() => setShow(true),[])
   
     return (
       <>
-        <Button variant="primary" onClick={handleShow} disabled={props.disabled} >
-          {type}
-        </Button>
+        <button 
+          className={disabled ?'disabled-button' : 'custom-button'}
+          onClick={handleShow} 
+          disabled={disabled} 
+        >
+        {type}</button>
         <Modal
           show={show}
           onHide={handleClose}
           keyboard={false}
         >
           <Modal.Body>
-
                     <div >
-                        {type === 'Add post' && <AddPost closeModal={setShow} />}
-                        {type === 'Add comment' && <AddComment postId={props.postId} closeModal={setShow}/>}
-                        {type === 'EDIT' && <EditPost postId={props.postId} closeModal={setShow}/>}
-                        {type === 'All Comments' && <AllComments postId={props.postId}/>}
+                        {type === ADD_POST && <AddPost closeModal={setShow} />}
+                        {type === ADD_COMMENT && <AddComment postId={postId} closeModal={setShow}/>}
+                        {type === EDIT && <EditPost postId={postId} closeModal={setShow}/>}
+                        {type === ALL_COMMENTS && <AllComments postId={postId}/>}
                     </div>
           </Modal.Body>
           <Modal.Footer>

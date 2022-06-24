@@ -1,24 +1,30 @@
-import React, { useContext } from 'react'
-import { Context } from '../context/Context'
-import { Rerender } from '../post/Posts'
-import { deleteComment, updateComment } from '../utils/updatePost'
+import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { rerender } from '../../features/reducers/postSlice'
+import { deleteComment, updateComment } from '../../features/funcs/mainPostFuncs'
 
-export default function Comment(props) {
-  const user = useContext(Context)
-  const rerender = useContext(Rerender)
-
+export default function Comment({text, username, id}) {
+    const {user} = useSelector(store => store.account)
+    const dispatch = useDispatch()
 
   return (
-    <li className='d-flex flex-column border rounded fs-5 font-monospace py-3 px-3'>
+    <li className='comment__item'>
         <div className='d-flex'>
-            <p className='fw-bold pe-3'>{props.comment.username}: </p>
-            <p>{props.comment.text}</p>
+            <p className='fw-bold pe-3'>{username}: </p>
+            <p>{text}</p>
         </div>
         
-        {props.comment.username === user && 
-            <div className='d-flex justify-content-between px-5'>
-                <button className='btn bg-warning' onClick={() => updateComment(props.comment.id, {text:prompt("New text") }, () => rerender)}>EDIT</button>
-                <button className='btn bg-danger' onClick={() => deleteComment(props.comment.id, () => rerender)}>DELETE</button>
+        {username === user 
+            && 
+            <div className='comment__item_edit'>
+                <button className='custom-button bg-warning' onClick={() => {
+                    updateComment(id, {text:prompt("New text"), likes:[], dislikes:[] })
+                    dispatch(rerender())
+                }}>EDIT</button>
+                <button className='custom-button bg-danger' onClick={() => {
+                    dispatch(deleteComment(id))
+                    dispatch(rerender())
+                }}>DELETE</button>
             </div>
         }
     </li>

@@ -4,9 +4,6 @@ export default function useFetch(url, rerender) {
     const isCurrent = useRef(true)
     const [fetchedData, setFetchedData] = useState({data:'', loading: true, error:null})
 
-
-
-    
     useEffect(() => {
         setFetchedData(prevData => ({data:prevData.data, loading:true, error:null}))
         fetch(url)

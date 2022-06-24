@@ -1,21 +1,22 @@
-import React, { useContext, useState } from 'react'
-import { Context } from '../context/Context'
-import { Rerender } from '../post/Posts'
-import { createComment } from '../utils/updatePost'
+import React, { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { rerender } from '../../features/reducers/postSlice'
+import { createComment } from '../../features/funcs/mainPostFuncs'
+import './styles/Comment.css'
 
 export default function AddComment(props) {
-  const user = useContext(Context)
   const [comment, setComment] = useState('')
-  const rerender = useContext(Rerender)
+  const {user} = useSelector(store => store.account)
+  const dispatch = useDispatch()
 
   return (
-    <div className='d-flex justify-content-between'>
-      <input className='ps-4 border rounded w-100' value={comment} onChange={(e) => setComment(e.target.value)} type='text' placeholder='Input Comment'/>
+    <div className='comment__add'>
+      <input className='post_input' value={comment} onChange={(e) => setComment(e.target.value)} type='text' placeholder='Input Comment'/>
       <button 
-        className='btn btn-primary'
+        className='custom-button'
         onClick={() => {
-        createComment({text:comment, postId:props.postId, username:user}, () => rerender)
-        props.closeModal(false)
+          dispatch(createComment({text:comment, postId:props.postId, username:user}))
+          dispatch(rerender())
       }}
         >AddPost</button>
     </div>
